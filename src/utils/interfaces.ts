@@ -4,3 +4,8 @@ export interface Task {
     date?: Date;
     isDone?: boolean;
 }
+
+export interface CustomError {
+    statusCode: number;
+    message: string;
+}

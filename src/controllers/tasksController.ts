@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as tasksServices from "../services/tasksService.ts";
+import { CustomError } from '../utils/interfaces.ts';
 
 export const getTasks = async (req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> => {
     try {
@@ -21,6 +22,9 @@ export const postTask = async (req: Request, res: Response): Promise<void | Resp
 export const deleteTask = async (req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> => {
     try {
         const task = await tasksServices.deleteTask(res.locals.id)
-        return res.status(201).send(task)
-    } catch (err) { return res.status(500).send(err) }
+        return res.sendStatus(204)
+    } catch (err: CustomError | any) {
+        if (err?.statusCode === 404) return res.status(err.statusCode).send(err.message)
+        return res.status(500).send(err)
+    }
 }

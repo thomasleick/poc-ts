@@ -42,14 +42,28 @@ export const postTask = async (task: Task) => {
 export const deleteTask = async (id: number) => {
     const client = await pool.connect();
     try {
-        const query =
-            `DELETE *
-                FROM todo_list
-                WHERE id=$1
-            `;
+        const query = `DELETE FROM todo_list WHERE id = $1;`;
         const result = await client.query(query, [id]);
 
         return result.rows;
+    } catch (err) {
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
+export const getTaskById = async (id: number) => {
+    const client = await pool.connect();
+    try {
+        const query =
+            `SELECT *
+                FROM todo_list
+                WHERE id = $1;
+            `;
+        const result = await client.query(query, [id]);
+
+        return result.rows[0];
     } catch (err) {
         throw err;
     } finally {

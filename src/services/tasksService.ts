@@ -15,6 +15,8 @@ export const postTask = async (task: Task) => {
 }
 
 export const deleteTask = async (id: number) => {
+    const foundTask = await tasksRepository.getTaskById(id);
+    if (!foundTask) throw { statusCode: 404, message: `Task not found with id ${id}` }
     const result = await tasksRepository.deleteTask(id);
     return result;
 };
