@@ -8,7 +8,7 @@ const taskRouter = Router();
 
 taskRouter.get("/", getTasks);
 taskRouter.post("/", schemaValidator(tasksSchema), postTask);
-taskRouter.delete("/", validateIdAsParams)
+taskRouter.delete("/:id", validateIdAsParams)
 
 
 
