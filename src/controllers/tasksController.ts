@@ -12,5 +12,15 @@ export const getTasks = async (req: Request, res: Response): Promise<void | Resp
 }
 
 export const postTask = async (req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> => {
+    try {
+        const task = await tasksServices.postTask(req.body)
+        return res.status(201).send(task)
+    } catch (err) { return res.status(500).send(err) }
+}
 
+export const deleteTask = async (req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> => {
+    try {
+        const task = await tasksServices.deleteTask(res.locals.id)
+        return res.status(201).send(task)
+    } catch (err) { return res.status(500).send(err) }
 }
