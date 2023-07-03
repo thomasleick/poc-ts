@@ -70,3 +70,27 @@ export const getTaskById = async (id: number) => {
         client.release();
     }
 };
+export const editTask = async (task: Task) => {
+    const client = await pool.connect();
+    try {
+        const { id, ...updatedTask } = task;
+
+        const columns = Object.keys(updatedTask)
+            .map((key, index) => `${key} = $${index + 1}`)
+            .join(", ");
+        const values = Object.values(updatedTask);
+        const query =
+            `UPDATE todo_list
+                SET ${columns}
+                WHERE id = $${values.length + 1}
+                RETURNING *
+            `;
+        const result = await client.query(query, [...values, task.id]);
+
+        return result.rows[0];
+    } catch (err) {
+        throw err;
+    } finally {
+        client.release();
+    }
+};
