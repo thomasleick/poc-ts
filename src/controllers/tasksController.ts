@@ -38,3 +38,11 @@ export const editTask = async (req: Request, res: Response): Promise<void | Resp
         return res.status(500).send(err)
     }
 }
+
+export const getTaskById = async (req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> => {
+    try {
+        const task = await tasksServices.getTaskById(res.locals.id)
+        return res.status(200).send(task)
+    } catch (err) { return res.status(500).send(err) }
+
+}

@@ -15,16 +15,19 @@ export const postTask = async (task: Task) => {
 }
 
 export const deleteTask = async (id: number) => {
-    const foundTask = await tasksRepository.getTaskById(id);
-    if (!foundTask) throw { statusCode: 404, message: `Task not found with id ${id}` }
+    await getTaskById(id);
     const result = await tasksRepository.deleteTask(id);
     return result;
 };
 
 export const editTask = async (task: Task, id: number) => {
-    const foundTask = await tasksRepository.getTaskById(id);
-    if (!foundTask) throw { statusCode: 404, message: `Task not found with id ${id}` }
+    await getTaskById(id);
     const result = await tasksRepository.editTask({ ...task, id });
     return result;
+}
 
+export const getTaskById = async (id: number) => {
+    const foundTask = await tasksRepository.getTaskById(id);
+    if (!foundTask) throw { statusCode: 404, message: `Task not found with id ${id}` }
+    return foundTask;
 }
